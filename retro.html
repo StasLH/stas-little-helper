@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ретроспектива — Weekly Review</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        Weekly Review
+      </a>
+      <nav>
+        <a href="index.html">Главная</a>
+        <a href="retro.html" class="active">Ретро</a>
+        <a href="plan.html">План</a>
+        <a href="history.html">История</a>
+      </nav>
+    </header>
+
+    <h1>🟢 Ретроспектива недели</h1>
+    <p class="subtitle">Пятница · закрыть неделю честно, пока память свежая</p>
+
+    <div class="review-meta">
+      <div>
+        <div class="week-label" id="week-label">—</div>
+        <div class="date-label" id="date-label">—</div>
+      </div>
+      <div class="status-badge draft">Черновик</div>
+    </div>
+
+    <form id="retro-form">
+      <!-- Block 1 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 1</span>
+          <h2>Реальность недели</h2>
+          <span class="block-time">~10 мин</span>
+        </div>
+        <p class="block-desc">Три вопроса, отвечай письменно, без самообмана.</p>
+
+        <div class="question">
+          <label><span class="q-num">1.</span>Какие 1–3 РЕШЕНИЯ я принял на этой неделе, которые изменят что-то в компании?</label>
+          <textarea data-field="r1_decisions" placeholder="Не «мы обсудили» — именно решения. Конкретные, с последствиями."></textarea>
+          <p class="hint">Если меньше 1 за неделю — красный флаг.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">2.</span>Какие стратегические проекты двинулись вперёд, и на сколько?</label>
+          <textarea data-field="r2_strategic" placeholder="Формат: «lh-fin-control — добавил X, осталось Y» или «CI — застрял на Z уже вторую неделю»."></textarea>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">3.</span>Сколько часов я провёл в maker-режиме (глубокая работа без встреч)?</label>
+          <input type="number" min="0" max="60" step="0.5" data-field="r3_maker_hours" placeholder="Часов за неделю" />
+          <p class="hint">Если &lt;6 часов — это корень проблемы.</p>
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 2</span>
+          <h2>Зоны имитации</h2>
+          <span class="block-time">~10 мин</span>
+        </div>
+        <p class="block-desc">Твои персональные слабые места: встречи, системы, команда.</p>
+
+        <div class="question">
+          <label><span class="q-num">4.</span>ВСТРЕЧИ: Сколько встреч было? Сколько привели к решению или действию?</label>
+          <textarea data-field="r4_meetings" placeholder="Например: 18 встреч, 5 с решением (28%). Список тех, что на следующей неделе убираю или делегирую: ..."></textarea>
+          <p class="hint">Если ratio &lt;50% — список встреч, которые на следующей неделе убираю или делегирую.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">5.</span>СИСТЕМЫ: Что строил? Какие решения приняты на основе уже существующих?</label>
+          <textarea data-field="r5_systems" placeholder="Какие дашборды/системы/отчёты собирал. Для каких из уже существующих принял решения."></textarea>
+          <p class="hint">Красный флаг: построил новое, но старое не используется для решений.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">6.</span>КОМАНДА: Где я подменял людей вместо того, чтобы дать им сделать самим?</label>
+          <textarea data-field="r6_team" placeholder="Конкретные эпизоды. «Влез в задачу X вместо того, чтобы доверить Y»."></textarea>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 3</span>
+          <h2>Честная оценка</h2>
+          <span class="block-time">~5 мин</span>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">7.</span>По шкале 1–10: насколько неделя была реальной работой vs имитацией?</label>
+          <div class="scale-input" data-field="r7_score">
+            <button type="button" class="scale-btn" data-value="1">1</button>
+            <button type="button" class="scale-btn" data-value="2">2</button>
+            <button type="button" class="scale-btn" data-value="3">3</button>
+            <button type="button" class="scale-btn" data-value="4">4</button>
+            <button type="button" class="scale-btn" data-value="5">5</button>
+            <button type="button" class="scale-btn" data-value="6">6</button>
+            <button type="button" class="scale-btn" data-value="7">7</button>
+            <button type="button" class="scale-btn" data-value="8">8</button>
+            <button type="button" class="scale-btn" data-value="9">9</button>
+            <button type="button" class="scale-btn" data-value="10">10</button>
+          </div>
+          <div class="scale-labels">
+            <span>Полная имитация</span>
+            <span>Реальная работа</span>
+          </div>
+          <p class="hint">Единственная количественная метрика. Веди её — увидишь тренд через 12 недель.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">8.</span>Что я НЕ буду делать на следующей неделе? (1–2 пункта)</label>
+          <textarea data-field="r8_not_doing" placeholder="Явный отказ. Без него всё остальное не работает."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btn-export">Экспорт в Markdown</button>
+        <a href="plan.html" class="btn btn-secondary">Перейти к плану →</a>
+        <span class="save-indicator">Автосохранение включено</span>
+      </div>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function() {
+      const weekKey = getWeekKey();
+      const { start, end } = getWeekDateRange();
+      document.getElementById('week-label').textContent = 'Неделя ' + weekKey;
+      document.getElementById('date-label').textContent =
+        formatDateShort(start) + ' – ' + formatDateShort(end);
+
+      const form = document.getElementById('retro-form');
+      initFormAutoSave(form, weekKey, 'retro');
+
+      document.getElementById('btn-export').addEventListener('click', () => {
+        exportWeekMarkdown(weekKey);
+      });
+    })();
+  </script>
+</body>
+</html>

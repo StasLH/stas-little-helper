@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>История — Weekly Review</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container-wide">
+    <header class="app-header">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        Weekly Review
+      </a>
+      <nav>
+        <a href="index.html">Главная</a>
+        <a href="retro.html">Ретро</a>
+        <a href="plan.html">План</a>
+        <a href="history.html" class="active">История</a>
+      </nav>
+    </header>
+
+    <h1>📚 История review</h1>
+    <p class="subtitle">Все прошлые недели. Клик — открыть детали. Экспорт для отчёта перед CEO.</p>
+
+    <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-secondary" id="btn-backup">📥 Скачать JSON-бэкап</button>
+      <label class="btn btn-secondary" style="cursor:pointer;">
+        📤 Импорт JSON
+        <input type="file" id="file-import" accept=".json" style="display:none" />
+      </label>
+      <div style="flex:1"></div>
+      <div id="stats" style="color:var(--text-secondary); font-size:13px; align-self:center;"></div>
+    </div>
+
+    <div id="history-list" class="history-list"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Закрыть">×</button>
+      <h2 id="modal-title">—</h2>
+      <p class="modal-meta" id="modal-meta">—</p>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="modal-export">Экспорт в Markdown</button>
+        <button type="button" class="btn btn-danger" id="modal-delete">Удалить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function() {
+      const listEl = document.getElementById('history-list');
+      const statsEl = document.getElementById('stats');
+      const modal = document.getElementById('modal-overlay');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMeta = document.getElementById('modal-meta');
+      const modalBody = document.getElementById('modal-body');
+      const modalClose = document.getElementById('modal-close');
+      const modalExport = document.getElementById('modal-export');
+      const modalDelete = document.getElementById('modal-delete');
+
+      let currentWeekKey = null;
+
+      function render() {
+        const all = loadAll();
+        const keys = Object.keys(all).sort().reverse();
+
+        if (!keys.length) {
+          listEl.innerHTML = `
+            <div class="empty-state">
+              <h2>Пока пусто</h2>
+              <p>Сделай первое ретро или план, и неделя появится здесь.</p>
+            </div>`;
+          statsEl.textContent = '';
+          return;
+        }
+
+        const retroCount = keys.filter(k => all[k].retro).length;
+        const planCount = keys.filter(k => all[k].plan).length;
+        const scores = keys.map(k => all[k].retro?.r7_score).filter(s => s != null);
+        const avgScore = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : '—';
+        statsEl.textContent = `${keys.length} недель · ${retroCount} ретро · ${planCount} планов · ср. оценка: ${avgScore}`;
+
+        listEl.innerHTML = keys.map(k => {
+          const week = all[k];
+          const { start, end } = weekKeyToRange(k);
+          const hasRetro = !!week.retro;
+          const hasPlan = !!week.plan;
+          const score = week.retro?.r7_score;
+          let scoreCls = 'na';
+          let scoreText = '—';
+          if (score != null) {
+            scoreText = score + '/10';
+            if (score >= 7) scoreCls = 'good';
+            else if (score >= 4) scoreCls = 'mid';
+            else scoreCls = 'low';
+          }
+          return `
+            <div class="history-item" data-week="${k}">
+              <div>
+                <div class="week-main">${k}</div>
+                <div class="week-dates">${formatDateShort(start)} – ${formatDateShort(end)}</div>
+              </div>
+              <div class="types">
+                <span class="type-tag ${hasRetro ? 'retro' : 'missing'}">${hasRetro ? '🟢 Ретро' : 'нет ретро'}</span>
+                <span class="type-tag ${hasPlan ? 'plan' : 'missing'}">${hasPlan ? '🟠 План' : 'нет плана'}</span>
+              </div>
+              <div class="score ${scoreCls}">${scoreText}</div>
+            </div>`;
+        }).join('');
+
+        listEl.querySelectorAll('.history-item').forEach(el => {
+          el.addEventListener('click', () => openModal(el.dataset.week));
+        });
+      }
+
+      function renderSection(label, value) {
+        const empty = value === '' || value == null;
+        const text = empty ? '(не заполнено)' : value;
+        return `
+          <div class="section">
+            <h3>${label}</h3>
+            <p class="${empty ? 'empty' : ''}">${escapeHtml(text)}</p>
+          </div>`;
+      }
+
+      function escapeHtml(s) {
+        if (s == null) return '';
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      function openModal(weekKey) {
+        currentWeekKey = weekKey;
+        const week = getWeek(weekKey);
+        const { start, end } = weekKeyToRange(weekKey);
+
+        modalTitle.textContent = 'Неделя ' + weekKey;
+        modalMeta.textContent = formatDateFull(start) + ' — ' + formatDateFull(end);
+
+        let html = '';
+        if (week.retro) {
+          const r = week.retro;
+          html += '<h3 style="color:var(--lh-green-light); margin-top:8px; margin-bottom:12px;">🟢 РЕТРОСПЕКТИВА</h3>';
+          html += renderSection('1. Принятые решения', r.r1_decisions);
+          html += renderSection('2. Стратегические проекты', r.r2_strategic);
+          html += renderSection('3. Часы в maker-режиме', r.r3_maker_hours != null ? r.r3_maker_hours + ' ч' : '');
+          html += renderSection('4. Встречи → решения', r.r4_meetings);
+          html += renderSection('5. Системы vs решения', r.r5_systems);
+          html += renderSection('6. Где подменял команду', r.r6_team);
+          html += renderSection('7. Реальность vs имитация', r.r7_score != null ? r.r7_score + '/10' : '');
+          html += renderSection('8. Что НЕ буду делать', r.r8_not_doing);
+        }
+        if (week.plan) {
+          const p = week.plan;
+          html += '<h3 style="color:var(--lh-orange); margin-top:24px; margin-bottom:12px;">🟠 ПЛАН</h3>';
+          html += renderSection('9. Главный результат', p.p1_main_outcome);
+          html += renderSection('10. Второй результат', p.p2_second_outcome);
+          html += renderSection('11. Maker-блоки', p.p3_maker_blocks);
+          html += renderSection('12. Встречи на сокращение', p.p4_meetings_cut);
+          html += renderSection('13. Проактивное действие', p.p5_proactive);
+          html += renderSection('14. Отложенный разговор', p.p6_postponed);
+        }
+        if (!week.retro && !week.plan) {
+          html = '<p class="empty" style="color:var(--text-muted)">Нет данных за эту неделю.</p>';
+        }
+        modalBody.innerHTML = html;
+        modal.classList.add('open');
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        currentWeekKey = null;
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => {
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+
+      modalExport.addEventListener('click', () => {
+        if (currentWeekKey) exportWeekMarkdown(currentWeekKey);
+      });
+
+      modalDelete.addEventListener('click', () => {
+        if (!currentWeekKey) return;
+        if (confirm('Удалить неделю ' + currentWeekKey + '? Это действие необратимо.')) {
+          deleteWeek(currentWeekKey);
+          closeModal();
+          render();
+          showToast('Неделя удалена');
+        }
+      });
+
+      document.getElementById('btn-backup').addEventListener('click', exportAllJSON);
+
+      document.getElementById('file-import').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) importJSON(file);
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

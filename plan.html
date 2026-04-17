@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>План недели — Weekly Review</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        Weekly Review
+      </a>
+      <nav>
+        <a href="index.html">Главная</a>
+        <a href="retro.html">Ретро</a>
+        <a href="plan.html" class="active">План</a>
+        <a href="history.html">История</a>
+      </nav>
+    </header>
+
+    <h1>🟠 План недели</h1>
+    <p class="subtitle">Понедельник утром · выбрать главный результат и защитить время</p>
+
+    <div class="review-meta">
+      <div>
+        <div class="week-label" id="week-label">—</div>
+        <div class="date-label" id="date-label">—</div>
+      </div>
+      <div class="status-badge draft">Черновик</div>
+    </div>
+
+    <form id="plan-form">
+      <!-- Block 1 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 1</span>
+          <h2>Один главный результат</h2>
+          <span class="block-time">~10 мин</span>
+        </div>
+        <p class="block-desc">Высоко-C люди не делают больше — они делают то, что важно, раньше остальных.</p>
+
+        <div class="question">
+          <label><span class="q-num">9.</span>Какой ОДИН результат, если я его достигну, сделает неделю успешной?</label>
+          <textarea data-field="p1_main_outcome" placeholder="Не «продвинуться», а конкретный observable outcome. Пример: «Cascade engine в fin-control работает на всех 38 строках и показан CEO»."></textarea>
+          <p class="hint">Один, не три. Именно один.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">10.</span>Какой второй результат, если останется время?</label>
+          <textarea data-field="p2_second_outcome" placeholder="Бонус, не обязательство."></textarea>
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 2</span>
+          <h2>Защита времени</h2>
+          <span class="block-time">~10 мин</span>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">11.</span>Когда на этой неделе у меня 2+ maker-блока по 2–3 часа?</label>
+          <textarea data-field="p3_maker_blocks" placeholder="Конкретные слоты: вт 9:00–12:00, чт 9:00–11:30. Впиши в календарь СЕЙЧАС, не «найду время»."></textarea>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">12.</span>Какие встречи этой недели я могу отменить, сократить или делегировать?</label>
+          <textarea data-field="p4_meetings_cut" placeholder="Минимум одна. Каждую неделю."></textarea>
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="block">
+        <div class="block-header">
+          <span class="block-num">БЛОК 3</span>
+          <h2>Проактивность</h2>
+          <span class="block-time">~10 мин</span>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">13.</span>Что я делаю ПРОАКТИВНО (инициирую сам), а не РЕАКТИВНО?</label>
+          <textarea data-field="p5_proactive" placeholder="Одно конкретное действие. Без этого неделя будет чистой реактивностью."></textarea>
+        </div>
+
+        <div class="question">
+          <label><span class="q-num">14.</span>Один неудобный разговор/решение, которое я откладываю?</label>
+          <textarea data-field="p6_postponed" placeholder="Необязательно делать на этой неделе, но признать существование."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-primary" id="btn-export">Экспорт в Markdown</button>
+        <a href="history.html" class="btn btn-secondary">История →</a>
+        <span class="save-indicator">Автосохранение включено</span>
+      </div>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function() {
+      const weekKey = getWeekKey();
+      const { start, end } = getWeekDateRange();
+      document.getElementById('week-label').textContent = 'Неделя ' + weekKey;
+      document.getElementById('date-label').textContent =
+        formatDateShort(start) + ' – ' + formatDateShort(end);
+
+      const form = document.getElementById('plan-form');
+      initFormAutoSave(form, weekKey, 'plan');
+
+      document.getElementById('btn-export').addEventListener('click', () => {
+        exportWeekMarkdown(weekKey);
+      });
+    })();
+  </script>
+</body>
+</html>

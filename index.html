@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Review — Lev Haolam</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        Weekly Review
+      </a>
+      <nav>
+        <a href="index.html" class="active">Главная</a>
+        <a href="retro.html">Ретро</a>
+        <a href="plan.html">План</a>
+        <a href="history.html">История</a>
+      </nav>
+    </header>
+
+    <h1>Weekly Review</h1>
+    <p class="subtitle" id="subtitle">—</p>
+
+    <div class="mode-grid">
+      <a href="retro.html" class="mode-card retro">
+        <div class="icon">🟢</div>
+        <h2>Ретроспектива</h2>
+        <p>Пятница, ~30 мин. Честно закрыть неделю: решения, стратегия, зоны имитации, оценка.</p>
+      </a>
+      <a href="plan.html" class="mode-card plan">
+        <div class="icon">🟠</div>
+        <h2>План недели</h2>
+        <p>Понедельник утром, ~30 мин. Один главный результат, защита времени, проактивность.</p>
+      </a>
+      <a href="history.html" class="mode-card history">
+        <div class="icon">📚</div>
+        <h2>История</h2>
+        <p>Все прошлые review, оценки по неделям, экспорт для отчёта CEO.</p>
+      </a>
+    </div>
+
+    <div class="block" style="margin-top:32px;">
+      <h3 style="margin-bottom:12px;">Как пользоваться</h3>
+      <p style="color:var(--text-secondary); font-size:13px; line-height:1.6;">
+        <strong>Пятница 16:00–16:30</strong> — зайди в <em>Ретро</em>, ответь на 8 вопросов. Всё сохраняется автоматически.<br>
+        <strong>Понедельник 8:30–9:00</strong> — зайди в <em>План</em>, ответь на 6 вопросов.<br>
+        Перед встречей с CEO открой <em>Историю</em>, выбери неделю, экспортируй в Markdown.<br>
+        <br>
+        <span style="color:var(--text-muted);">Данные хранятся только в твоём браузере (localStorage). Регулярно делай JSON-бэкап через страницу Истории.</span>
+      </p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function() {
+      const key = getWeekKey();
+      const { start, end } = getWeekDateRange();
+      document.getElementById('subtitle').textContent =
+        `Текущая неделя: ${key} · ${formatDateShort(start)} – ${formatDateShort(end)}`;
+    })();
+  </script>
+</body>
+</html>

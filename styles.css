@@ -8,14 +8,14 @@
   --lh-red: #F7520C;
   --lh-grey: #A9ACB4;
 
-  /* Dark theme surfaces */
-  --bg-page: #14161A;
-  --bg-card: #1C1E24;
-  --bg-elevated: #24272E;
-  --border: #2C2F35;
-  --text-primary: #FCFDFD;
-  --text-secondary: #A9ACB4;
-  --text-muted: #6E727A;
+  /* Light theme surfaces (LH brand) */
+  --bg-page: #F4F5F6;
+  --bg-card: #FCFDFD;
+  --bg-elevated: #FFFFFF;
+  --border: #E5E7EB;
+  --text-primary: #202327;
+  --text-secondary: #5A5D65;
+  --text-muted: #9094A0;
 
   --radius: 10px;
   --radius-sm: 6px;
@@ -39,12 +39,13 @@ html, body {
 }
 
 a {
-  color: var(--lh-green-light);
+  color: var(--lh-green-dark);
   text-decoration: none;
 }
 
 a:hover {
-  color: var(--lh-green-dark);
+  color: var(--lh-green-light);
+  text-decoration: underline;
 }
 
 /* Layout */
@@ -223,8 +224,8 @@ h3 {
 }
 
 .status-badge.saved {
-  background: rgba(170, 211, 79, 0.15);
-  color: var(--lh-green-light);
+  background: rgba(170, 211, 79, 0.2);
+  color: var(--lh-green-dark);
 }
 
 /* Section blocks */
@@ -244,7 +245,7 @@ h3 {
 }
 
 .block-header .block-num {
-  color: var(--lh-green-light);
+  color: var(--lh-green-dark);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.05em;
@@ -351,8 +352,8 @@ input::placeholder {
 
 .scale-btn.selected {
   background: var(--lh-green-dark);
-  border-color: var(--lh-green-light);
-  color: var(--text-primary);
+  border-color: var(--lh-green-dark);
+  color: #FCFDFD;
 }
 
 .scale-labels {
@@ -389,12 +390,12 @@ input::placeholder {
 
 .btn-primary {
   background: var(--lh-green-dark);
-  color: var(--text-primary);
+  color: #FCFDFD;
 }
 
 .btn-primary:hover {
   background: var(--lh-green-light);
-  color: #14161A;
+  color: #202327;
 }
 
 .btn-secondary {
@@ -404,8 +405,8 @@ input::placeholder {
 }
 
 .btn-secondary:hover {
-  border-color: var(--lh-green-light);
-  color: var(--lh-green-light);
+  border-color: var(--lh-green-dark);
+  color: var(--lh-green-dark);
 }
 
 .btn-danger {
@@ -420,7 +421,7 @@ input::placeholder {
 
 .btn-orange {
   background: var(--lh-orange);
-  color: #14161A;
+  color: #202327;
 }
 
 .btn-orange:hover {
@@ -435,7 +436,7 @@ input::placeholder {
 }
 
 .save-indicator.visible {
-  color: var(--lh-green-light);
+  color: var(--lh-green-dark);
   font-style: normal;
 }
 
@@ -489,8 +490,8 @@ input::placeholder {
 }
 
 .type-tag.retro {
-  background: rgba(170, 211, 79, 0.15);
-  color: var(--lh-green-light);
+  background: rgba(170, 211, 79, 0.2);
+  color: var(--lh-green-dark);
 }
 
 .type-tag.plan {
@@ -510,7 +511,7 @@ input::placeholder {
   font-size: 16px;
 }
 
-.score.good { color: var(--lh-green-light); }
+.score.good { color: var(--lh-green-dark); }
 .score.mid { color: var(--lh-orange); }
 .score.low { color: var(--lh-red); }
 .score.na { color: var(--text-muted); font-weight: 400; font-size: 12px; }
@@ -575,7 +576,7 @@ input::placeholder {
 }
 
 .modal .section h3 {
-  color: var(--lh-green-light);
+  color: var(--lh-green-dark);
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -630,7 +631,7 @@ input::placeholder {
   left: 50%;
   transform: translateX(-50%) translateY(120px);
   background: var(--lh-green-dark);
-  color: var(--text-primary);
+  color: #FCFDFD;
   padding: 12px 20px;
   border-radius: var(--radius);
   font-size: 13px;

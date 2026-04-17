@@ -22,7 +22,7 @@
     </header>
 
     <h1>📚 История review</h1>
-    <p class="subtitle">Все прошлые недели. Клик — открыть детали. Экспорт для отчёта перед CEO.</p>
+    <p class="subtitle">Все прошлые недели. Клик — открыть детали. Смотри тренд по оценкам и готовься к новой неделе на базе предыдущей.</p>
 
     <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
       <button type="button" class="btn btn-secondary" id="btn-backup">📥 Скачать JSON-бэкап</button>
@@ -84,7 +84,15 @@
         const planCount = keys.filter(k => all[k].plan).length;
         const scores = keys.map(k => all[k].retro?.r7_score).filter(s => s != null);
         const avgScore = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : '—';
-        statsEl.textContent = `${keys.length} недель · ${retroCount} ретро · ${planCount} планов · ср. оценка: ${avgScore}`;
+        const pluralize = (n, forms) => {
+          const mod10 = n % 10, mod100 = n % 100;
+          if (mod10 === 1 && mod100 !== 11) return forms[0];
+          if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return forms[1];
+          return forms[2];
+        };
+        const weeksWord = pluralize(keys.length, ['неделя', 'недели', 'недель']);
+        const plansWord = pluralize(planCount, ['план', 'плана', 'планов']);
+        statsEl.textContent = `${keys.length} ${weeksWord} · ${retroCount} ретро · ${planCount} ${plansWord} · ср. оценка: ${avgScore}`;
 
         listEl.innerHTML = keys.map(k => {
           const week = all[k];
@@ -148,7 +156,7 @@
         let html = '';
         if (week.retro) {
           const r = week.retro;
-          html += '<h3 style="color:var(--lh-green-light); margin-top:8px; margin-bottom:12px;">🟢 РЕТРОСПЕКТИВА</h3>';
+          html += '<h3 style="color:var(--lh-green-dark); margin-top:8px; margin-bottom:12px;">🟢 РЕТРОСПЕКТИВА</h3>';
           html += renderSection('1. Принятые решения', r.r1_decisions);
           html += renderSection('2. Стратегические проекты', r.r2_strategic);
           html += renderSection('3. Часы в maker-режиме', r.r3_maker_hours != null ? r.r3_maker_hours + ' ч' : '');

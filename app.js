@@ -211,32 +211,32 @@ function retroToMarkdown(weekKey, data) {
 
   lines.push('## Блок 1. Реальность недели');
   lines.push('');
-  lines.push('**1. Принятые решения, меняющие компанию:**');
+  lines.push('**7. Принятые решения, меняющие компанию:**');
   lines.push(data.r1_decisions || '_(не заполнено)_');
   lines.push('');
-  lines.push('**2. Движение стратегических проектов:**');
+  lines.push('**8. Движение стратегических проектов:**');
   lines.push(data.r2_strategic || '_(не заполнено)_');
   lines.push('');
-  lines.push('**3. Часы в maker-режиме:** ' + (data.r3_maker_hours ?? '—'));
+  lines.push('**9. Часы в maker-режиме:** ' + (data.r3_maker_hours ?? '—'));
   lines.push('');
 
   lines.push('## Блок 2. Зоны имитации');
   lines.push('');
-  lines.push('**4. Встречи → решения:**');
+  lines.push('**10. Встречи → решения:**');
   lines.push(data.r4_meetings || '_(не заполнено)_');
   lines.push('');
-  lines.push('**5. Системы vs решения на них:**');
+  lines.push('**11. Системы vs решения на них:**');
   lines.push(data.r5_systems || '_(не заполнено)_');
   lines.push('');
-  lines.push('**6. Где подменял команду:**');
+  lines.push('**12. Где подменял команду:**');
   lines.push(data.r6_team || '_(не заполнено)_');
   lines.push('');
 
   lines.push('## Блок 3. Честная оценка');
   lines.push('');
-  lines.push('**7. Реальность vs имитация (1–10):** ' + (data.r7_score ?? '—'));
+  lines.push('**13. Реальность vs имитация (1–10):** ' + (data.r7_score ?? '—'));
   lines.push('');
-  lines.push('**8. Что НЕ буду делать на следующей неделе:**');
+  lines.push('**14. Что НЕ буду делать на следующей неделе:**');
   lines.push(data.r8_not_doing || '_(не заполнено)_');
   lines.push('');
 
@@ -252,28 +252,28 @@ function planToMarkdown(weekKey, data) {
 
   lines.push('## Блок 1. Главный результат');
   lines.push('');
-  lines.push('**9. Главный результат недели:**');
+  lines.push('**1. Главный результат недели:**');
   lines.push(data.p1_main_outcome || '_(не заполнено)_');
   lines.push('');
-  lines.push('**10. Второй результат (если останется время):**');
+  lines.push('**2. Второй результат (если останется время):**');
   lines.push(data.p2_second_outcome || '_(не заполнено)_');
   lines.push('');
 
   lines.push('## Блок 2. Защита времени');
   lines.push('');
-  lines.push('**11. Maker-блоки в календаре (когда и сколько):**');
+  lines.push('**3. Maker-блоки в календаре (когда и сколько):**');
   lines.push(data.p3_maker_blocks || '_(не заполнено)_');
   lines.push('');
-  lines.push('**12. Встречи на отмену/сокращение/делегирование:**');
+  lines.push('**4. Встречи на отмену/сокращение/делегирование:**');
   lines.push(data.p4_meetings_cut || '_(не заполнено)_');
   lines.push('');
 
   lines.push('## Блок 3. Проактивность');
   lines.push('');
-  lines.push('**13. Проактивное действие недели:**');
+  lines.push('**5. Проактивное действие недели:**');
   lines.push(data.p5_proactive || '_(не заполнено)_');
   lines.push('');
-  lines.push('**14. Откладываемый неудобный разговор/решение:**');
+  lines.push('**6. Откладываемый неудобный разговор/решение:**');
   lines.push(data.p6_postponed || '_(не заполнено)_');
   lines.push('');
 
@@ -312,8 +312,8 @@ function downloadText(filename, content, mime = 'text/plain') {
 function exportWeekMarkdown(weekKey) {
   const week = getWeek(weekKey);
   let md = '';
-  if (week.retro) md += retroToMarkdown(weekKey, week.retro) + '\n\n';
-  if (week.plan) md += planToMarkdown(weekKey, week.plan) + '\n';
+  if (week.plan) md += planToMarkdown(weekKey, week.plan) + '\n\n';
+  if (week.retro) md += retroToMarkdown(weekKey, week.retro) + '\n';
   if (!md) {
     showToast('Нет данных для экспорта', true);
     return;

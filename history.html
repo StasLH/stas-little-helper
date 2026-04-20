@@ -92,7 +92,7 @@
         };
         const weeksWord = pluralize(keys.length, ['неделя', 'недели', 'недель']);
         const plansWord = pluralize(planCount, ['план', 'плана', 'планов']);
-        statsEl.textContent = `${keys.length} ${weeksWord} · ${retroCount} ретро · ${planCount} ${plansWord} · ср. оценка: ${avgScore}`;
+        statsEl.textContent = `${keys.length} ${weeksWord} · ${planCount} ${plansWord} · ${retroCount} ретро · ср. оценка: ${avgScore}`;
 
         listEl.innerHTML = keys.map(k => {
           const week = all[k];
@@ -115,8 +115,8 @@
                 <div class="week-dates">${formatDateShort(start)} – ${formatDateShort(end)}</div>
               </div>
               <div class="types">
-                <span class="type-tag ${hasRetro ? 'retro' : 'missing'}">${hasRetro ? '🟢 Ретро' : 'нет ретро'}</span>
                 <span class="type-tag ${hasPlan ? 'plan' : 'missing'}">${hasPlan ? '🟠 План' : 'нет плана'}</span>
+                <span class="type-tag ${hasRetro ? 'retro' : 'missing'}">${hasRetro ? '🟢 Ретро' : 'нет ретро'}</span>
               </div>
               <div class="score ${scoreCls}">${scoreText}</div>
             </div>`;
@@ -154,27 +154,27 @@
         modalMeta.textContent = formatDateFull(start) + ' — ' + formatDateFull(end);
 
         let html = '';
-        if (week.retro) {
-          const r = week.retro;
-          html += '<h3 style="color:var(--lh-green-dark); margin-top:8px; margin-bottom:12px;">🟢 РЕТРОСПЕКТИВА</h3>';
-          html += renderSection('1. Принятые решения', r.r1_decisions);
-          html += renderSection('2. Стратегические проекты', r.r2_strategic);
-          html += renderSection('3. Часы в maker-режиме', r.r3_maker_hours != null ? r.r3_maker_hours + ' ч' : '');
-          html += renderSection('4. Встречи → решения', r.r4_meetings);
-          html += renderSection('5. Системы vs решения', r.r5_systems);
-          html += renderSection('6. Где подменял команду', r.r6_team);
-          html += renderSection('7. Реальность vs имитация', r.r7_score != null ? r.r7_score + '/10' : '');
-          html += renderSection('8. Что НЕ буду делать', r.r8_not_doing);
-        }
         if (week.plan) {
           const p = week.plan;
-          html += '<h3 style="color:var(--lh-orange); margin-top:24px; margin-bottom:12px;">🟠 ПЛАН</h3>';
-          html += renderSection('9. Главный результат', p.p1_main_outcome);
-          html += renderSection('10. Второй результат', p.p2_second_outcome);
-          html += renderSection('11. Maker-блоки', p.p3_maker_blocks);
-          html += renderSection('12. Встречи на сокращение', p.p4_meetings_cut);
-          html += renderSection('13. Проактивное действие', p.p5_proactive);
-          html += renderSection('14. Отложенный разговор', p.p6_postponed);
+          html += '<h3 style="color:var(--lh-orange); margin-top:8px; margin-bottom:12px;">🟠 ПЛАН</h3>';
+          html += renderSection('1. Главный результат', p.p1_main_outcome);
+          html += renderSection('2. Второй результат', p.p2_second_outcome);
+          html += renderSection('3. Maker-блоки', p.p3_maker_blocks);
+          html += renderSection('4. Встречи на сокращение', p.p4_meetings_cut);
+          html += renderSection('5. Проактивное действие', p.p5_proactive);
+          html += renderSection('6. Отложенный разговор', p.p6_postponed);
+        }
+        if (week.retro) {
+          const r = week.retro;
+          html += '<h3 style="color:var(--lh-green-dark); margin-top:24px; margin-bottom:12px;">🟢 РЕТРОСПЕКТИВА</h3>';
+          html += renderSection('7. Принятые решения', r.r1_decisions);
+          html += renderSection('8. Стратегические проекты', r.r2_strategic);
+          html += renderSection('9. Часы в maker-режиме', r.r3_maker_hours != null ? r.r3_maker_hours + ' ч' : '');
+          html += renderSection('10. Встречи → решения', r.r4_meetings);
+          html += renderSection('11. Системы vs решения', r.r5_systems);
+          html += renderSection('12. Где подменял команду', r.r6_team);
+          html += renderSection('13. Реальность vs имитация', r.r7_score != null ? r.r7_score + '/10' : '');
+          html += renderSection('14. Что НЕ буду делать', r.r8_not_doing);
         }
         if (!week.retro && !week.plan) {
           html = '<p class="empty" style="color:var(--text-muted)">Нет данных за эту неделю.</p>';
